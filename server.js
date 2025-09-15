@@ -1,10 +1,14 @@
 import { PrismaClient } from './generated/prisma/index.js';
 import express from 'express';
+import cors from 'cors';
 
 const prisma = new PrismaClient();
 const app = express();
 
 app.use(express.json());
+
+// Permitir todas as origens
+app.use(cors());
 
 // ------------------ PRODUTOS ------------------
 
@@ -21,7 +25,7 @@ app.post('/produtos', async (req, res) => {
             data: {
                 nome,
                 preco: Number(preco),
-                estoque: estoque ?? 0
+                estoque: Number(estoque) ?? 0
             }
         });
         res.status(201).json(produto);
